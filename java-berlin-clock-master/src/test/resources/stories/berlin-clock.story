@@ -44,5 +44,17 @@ RRRR
 OOOOOOOOOOO
 OOOO
 
+Scenario: NullValueCheck
+When the time is null
+Then the clock should look like
+null
 
+Scenario: InvalidAlphanumericTime
+When the time is 24:A0:00
+Then the clock should look like
+null
 
+Scenario: InvalidTimePattern
+When the time is 24:00:00:00
+Then the clock should look like
+null
