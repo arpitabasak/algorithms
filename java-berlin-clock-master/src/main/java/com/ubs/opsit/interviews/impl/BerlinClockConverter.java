@@ -1,7 +1,6 @@
 package com.ubs.opsit.interviews.impl;
 
 import com.ubs.opsit.interviews.TimeConverter;
-import com.ubs.opsit.interviews.support.ClasspathStoryFinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -9,56 +8,69 @@ public class BerlinClockConverter implements TimeConverter{
 	
 	private static final java.util.logging.Logger LOG = LoggerFactory.getLogger(BerlinClockConverter.class);
 
-	private static String[][] berlinClock = {
-		{"O"},
-		{"O", "O", "O", "O"},
-		{"O", "O", "O", "O"},
-		{"O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"},
-		{"O", "O", "O", "O"}};
+	private String[][] berlinClock = {{"O"},
+					{"O", "O", "O", "O"},
+					{"O", "O", "O", "O"},
+					{"O", "O", "O", "O", "O", "O", "O", "O", "O", "O", "O"},
+					{"O", "O", "O", "O"}};
 	@Override
 	public String convertTime(String aTime) {
+		String berlinString = null;
 		if(aTime != null)
 		{
 			String[] digiTime = aTime.split(":");
-			for(int i=0; i< digiTime.length; i++)
+			try
 			{
-				int time = Integer.parseInt(digiTime[i]);
-				switch(i)
+				if(digiTime.length > 3)
 				{
-				case 0: Integer hrsMulFour = 0;
-					if(time >=5)
-					{
-						Integer hrsMulFive = time/5;
-						buildBerlinClockPartially(1, hrsMulFive*5, 5);
-						hrsMulFour = time%5;
-					}
-					if(hrsMulFour > 0)
-					{
-						buildBerlinClockPartially(2, hrsMulFour, 1);
-					}
-					break;	
-				case 1: Integer minMulFour = 0;
-					if(time >=5)
-					{
-						Integer minMulFive = time/5;
-						buildBerlinClockPartially(3, minMulFive*5, 5);
-						minMulFour = time%5;
-					}
-					if(minMulFour > 0)
-					{
-						buildBerlinClockPartially(4, minMulFour, 1);
-					}
-					break;	
-				case 2: 	
-					if(time%2 == 0) 
-					{
-						berlinClock[0][0] = "Y";
-					}
-					break;
+					throw new Exception("");
 				}
+				for(int i=0; i< digiTime.length; i++)
+				{
+					int time = Integer.parseInt(digiTime[i]);
+					switch(i)
+					{
+					case 0: Integer hrsMulFour = 0;
+						if(time >=5)
+						{
+							Integer hrsMulFive = time/5;
+							buildBerlinClockPartially(1, hrsMulFive*5, 5);
+							hrsMulFour = time%5;
+						}
+						if(hrsMulFour > 0)
+						{
+							buildBerlinClockPartially(2, hrsMulFour, 1);
+						}
+						break;	
+					case 1: Integer minMulFour = 0;
+						if(time >=5)
+						{
+							Integer minMulFive = time/5;
+							buildBerlinClockPartially(3, minMulFive*5, 5);
+							minMulFour = time%5;
+						}
+						if(minMulFour > 0)
+						{
+							buildBerlinClockPartially(4, minMulFour, 1);
+						}
+						break;	
+					case 2: 	
+						if(time%2 == 0) 
+						{
+							berlinClock[0][0] = "Y";
+						}
+						break;
+					}
+				}
+				berlinString = convertClockIntoString();
+			}
+			catch(NumberFormatException e)
+			{
+				LOG.info("Time cannot be alphanumeric: "+aTime);
+			} catch (Exception e) {
+				LOG.info("Invalid time pattern: "+aTime);
 			}
 		}
-		String berlinString = convertClockIntoString();
 		LOG.info("Berlin Clock output for time "+aTime+" is: "+berlinString);
 		return berlinString;
 	}
@@ -91,5 +103,4 @@ public class BerlinClockConverter implements TimeConverter{
 			}
 		}
 	}
-
 }
