@@ -66,9 +66,9 @@ public class BerlinClockConverter implements TimeConverter{
 			}
 			catch(NumberFormatException e)
 			{
-				LOG.info("Time cannot be alphanumeric: "+aTime);
+				LOG.error("Time cannot be alphanumeric: "+aTime);
 			} catch (Exception e) {
-				LOG.info("Invalid time pattern: "+aTime);
+				LOG.error("Invalid time pattern: "+aTime);
 			}
 		}
 		LOG.info("Berlin Clock output for time "+aTime+" is: "+berlinString);
